@@ -1,0 +1,20 @@
+{
+    "name": "paulnovikov/rest-client",
+    "description": "Rest Client for Producers",
+    "require": {
+        "php": ">=7.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Paulnovikov\\RestClient\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Paul Novykov",
+            "email": "pawelfcdd@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
