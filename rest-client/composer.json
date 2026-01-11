@@ -14,10 +14,21 @@
             "Paulnovikov\\RestClient\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Paulnovikov\\RestClient\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
     "authors": [
         {
             "name": "Paul Novykov",
             "email": "pawelfcdd@gmail.com"
         }
-    ]
+    ],
+    "scripts": {
+        "test": "phpunit"
+    }
 }

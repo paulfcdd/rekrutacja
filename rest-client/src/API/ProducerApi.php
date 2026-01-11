@@ -14,6 +14,8 @@ use Psr\Log\LoggerInterface;
 
 class ProducerApi extends AbstractApi
 {
+    private const PRODUCERS_PATH = 'producers';
+
     public function __construct(
         HttpClientInterface $httpClient,
         private readonly LoggerInterface $logger
@@ -28,7 +30,7 @@ class ProducerApi extends AbstractApi
      */
     public function getAll(): array
     {
-        $data = $this->request('GET', 'shop_api/v1/producers', 200);
+        $data = $this->request('GET', self::PRODUCERS_PATH, 200);
         $producers = [];
         $mapper = new ProducerMapper();
 
@@ -53,11 +55,13 @@ class ProducerApi extends AbstractApi
     /**
      * @throws JsonException
      */
-    public function create(ProducerCreate $producer): ProducerData
+    public function create(array $producerData): ProducerData
     {
+        $producer = ProducerCreate::fromArray($producerData);
+
         $data = $this->request(
             'POST',
-            'shop_api/v1/producers',
+            self::PRODUCERS_PATH,
             201,
             [],
             $producer->toPayload()

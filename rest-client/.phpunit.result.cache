@@ -1,0 +1,1 @@
+{"version":2,"defects":{"Paulnovikov\\RestClient\\Tests\\ProducerApiTest::testCreateAcceptsArrayPayload":7},"times":{"Paulnovikov\\RestClient\\Tests\\ProducerApiTest::testGetAllSkipsInvalidRecordsAndLogs":0.043,"Paulnovikov\\RestClient\\Tests\\ProducerApiTest::testCreateAcceptsArrayPayload":0.015}}
