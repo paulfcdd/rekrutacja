@@ -6,12 +6,25 @@ namespace Paulnovikov\RestClient\API;
 
 use JsonException;
 use Paulnovikov\RestClient\Exception\UnexpectedApiResponseException;
+use Paulnovikov\RestClient\Http\HttpClientInterface;
 use Paulnovikov\RestClient\Mapper\ProducerMapper;
 use Paulnovikov\RestClient\Model\Producer\Producer;
 use Paulnovikov\RestClient\Model\Producer\ProducerCreate;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class ProducerApi extends AbstractApi
 {
+    private LoggerInterface $logger;
+
+    public function __construct(
+        HttpClientInterface $httpClient,
+        ?LoggerInterface $logger = null
+    ) {
+        parent::__construct($httpClient);
+        $this->logger = $logger ?? new NullLogger();
+    }
+
     /**
      * @return Producer[]
      *
@@ -24,11 +37,17 @@ class ProducerApi extends AbstractApi
         $mapper = new ProducerMapper();
 
         foreach ($data as $item) {
-            if (!is_array($item)) {
-                throw new UnexpectedApiResponseException('Invalid producer response');
-            }
+            try {
+                if (!is_array($item)) {
+                    throw new UnexpectedApiResponseException('Invalid producer response');
+                }
 
-            $producers[] = $mapper->transformFromApiResponse($item);
+                $producers[] = $mapper->transformFromApiResponse($item);
+            } catch (UnexpectedApiResponseException) {
+                $this->logger->warning('Invalid producer record', [
+                    'item' => $item,
+                ]);
+            }
         }
 
         return $producers;
