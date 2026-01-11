@@ -6,12 +6,6 @@ REST client for the recruitment API.
 
 - PHP 7.4+ or 8.x
 
-## Installation
-
-```bash
-composer require paulnovikov/rest-client
-```
-
 ## Usage
 
 ```php
