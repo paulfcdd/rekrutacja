@@ -16,7 +16,7 @@ abstract class AbstractApi
     /**
      * @throws JsonException
      */
-    protected function requestJson(
+    protected function request(
         string $method,
         string $path,
         int $expectedStatus,

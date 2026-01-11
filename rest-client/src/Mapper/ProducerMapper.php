@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Paulnovikov\RestClient\Mapper;
 
-use Paulnovikov\RestClient\Model\Producer\Producer;
+use Paulnovikov\RestClient\Model\Producer\ProducerData;
 
 class ProducerMapper extends AbstractMapper
 {
-    public function transformFromApiResponse(array $data): Producer
+    public function transformFromApiResponse(array $data): ProducerData
     {
         self::assertKeyExists($data, 'id');
         self::assertKeyExists($data, 'name');
@@ -24,7 +24,7 @@ class ProducerMapper extends AbstractMapper
         self::assertInt($data['ordering'], 'ordering');
         self::assertString($data['source_id'], 'source_id');
 
-        return new Producer(
+        return new ProducerData(
             $data['id'],
             $data['name'],
             $data['site_url'],

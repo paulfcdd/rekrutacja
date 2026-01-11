@@ -4,7 +4,7 @@ namespace Paulnovikov\RestClient\Model\Producer;
 
 use Paulnovikov\RestClient\Model\ModelInterface;
 
-final readonly class Producer implements ModelInterface
+final readonly class ProducerData implements ModelInterface
 {
     public function __construct(
         private int $id,

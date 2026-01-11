@@ -8,7 +8,7 @@ use JsonException;
 use Paulnovikov\RestClient\Exception\UnexpectedApiResponseException;
 use Paulnovikov\RestClient\Http\HttpClientInterface;
 use Paulnovikov\RestClient\Mapper\ProducerMapper;
-use Paulnovikov\RestClient\Model\Producer\Producer;
+use Paulnovikov\RestClient\Model\Producer\ProducerData;
 use Paulnovikov\RestClient\Model\Producer\ProducerCreate;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -26,13 +26,13 @@ class ProducerApi extends AbstractApi
     }
 
     /**
-     * @return Producer[]
+     * @return ProducerData[]
      *
      * @throws JsonException
      */
     public function getAll(): array
     {
-        $data = $this->requestJson('GET', 'shop_api/v1/producers', 200);
+        $data = $this->request('GET', 'shop_api/v1/producers', 200);
         $producers = [];
         $mapper = new ProducerMapper();
 
@@ -56,9 +56,9 @@ class ProducerApi extends AbstractApi
     /**
      * @throws JsonException
      */
-    public function create(ProducerCreate $producer): Producer
+    public function create(ProducerCreate $producer): ProducerData
     {
-        $data = $this->requestJson(
+        $data = $this->request(
             'POST',
             'shop_api/v1/producers',
             201,
