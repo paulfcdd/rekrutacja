@@ -25,7 +25,7 @@ final readonly class ProducerApi
     {
         $response = $this->httpClient->request(
             'GET',
-            '/shop_api/v1/producers'
+            'shop_api/v1/producers'
         );
 
         if ($response->getStatusCode() !== 200) {
@@ -65,7 +65,7 @@ final readonly class ProducerApi
     {
         $response = $this->httpClient->request(
             'POST',
-            '/shop_api/v1/producers',
+            'shop_api/v1/producers',
             ['Content-Type' => 'application/json'],
             json_encode($producer->toPayload(), JSON_THROW_ON_ERROR)
         );
