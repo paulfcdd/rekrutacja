@@ -52,6 +52,7 @@ final readonly class GuzzleHttpClient implements HttpClientInterface
             throw new ApiException(
                 $message,
                 $resolvedUrl,
+                $method,
                 $statusCode,
                 $bodyContents,
                 $e
@@ -60,11 +61,17 @@ final readonly class GuzzleHttpClient implements HttpClientInterface
             throw new ApiException(
                 sprintf('HTTP request failed for %s %s', $method, $resolvedUrl),
                 $resolvedUrl,
+                $method,
                 null,
                 null,
                 $e
             );
         }
+    }
+
+    public function getBaseUri(): string
+    {
+        return $this->baseUri;
     }
 
     private function resolveUrl(string $url): string

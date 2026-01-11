@@ -59,18 +59,19 @@ abstract class AbstractApi
 
         if ($statusCode !== $expectedStatus) {
             $body = $this->truncateBody((string) $response->getBody());
+            $url = $this->buildUrl($path);
             $message = sprintf(
                 'Unexpected HTTP status %d for %s %s',
                 $statusCode,
                 $method,
-                $path
+                $url
             );
 
             if ($body !== '') {
                 $message .= sprintf(': %s', $body);
             }
 
-            throw new ApiException($message, $path, $statusCode, $body);
+            throw new ApiException($message, $url, $method, $statusCode, $body);
         }
     }
 
@@ -100,5 +101,17 @@ abstract class AbstractApi
         }
 
         return substr($body, 0, $limit) . '...';
+    }
+
+    private function buildUrl(string $path): string
+    {
+        $baseUri = rtrim($this->httpClient->getBaseUri(), '/');
+        $path = ltrim($path, '/');
+
+        if ($baseUri === '') {
+            return $path;
+        }
+
+        return $baseUri . '/' . $path;
     }
 }

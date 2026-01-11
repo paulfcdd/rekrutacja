@@ -12,6 +12,7 @@ final class ApiException extends RuntimeException
     public function __construct(
         string $message,
         private string $url,
+        private string $method,
         private ?int $statusCode = null,
         private ?string $responseBody = null,
         ?Throwable $previous = null
@@ -22,6 +23,11 @@ final class ApiException extends RuntimeException
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
     }
 
     public function getStatusCode(): ?int

@@ -11,7 +11,15 @@ final class RecordingHttpClient implements HttpClientInterface
 {
     public array $requests = [];
 
-    public function __construct(private ResponseInterface $response) {}
+    public function __construct(
+        private ResponseInterface $response,
+        private string $baseUri = 'http://example.test/shop_api/v1'
+    ) {}
+
+    public function getBaseUri(): string
+    {
+        return $this->baseUri;
+    }
 
     public function request(
         string $method,
