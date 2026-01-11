@@ -34,6 +34,9 @@ $created = $client->producers()->create([
 All HTTP and API errors are wrapped in `ApiException`, which includes URL, HTTP method,
 status code, and response body (if available).
 
+When calling `getAll()`, invalid records are skipped and logged (PSR-3), so the result
+may contain fewer items than the API response.
+
 ## Tests
 
 ```bash
