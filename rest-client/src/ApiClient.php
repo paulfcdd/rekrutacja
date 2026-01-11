@@ -9,6 +9,7 @@ use Paulnovikov\RestClient\API\ProducerApi;
 use Paulnovikov\RestClient\Http\GuzzleHttpClient;
 use Paulnovikov\RestClient\Http\HttpClientInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 final readonly class ApiClient
 {
@@ -35,6 +36,6 @@ final readonly class ApiClient
 
     public function producers(?LoggerInterface $logger = null): ProducerApi
     {
-        return new ProducerApi($this->httpClient, $logger);
+        return new ProducerApi($this->httpClient, $logger ?? new NullLogger());
     }
 }

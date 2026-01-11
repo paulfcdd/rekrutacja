@@ -8,10 +8,11 @@ use JsonException;
 use Paulnovikov\RestClient\Exception\HttpRequestException;
 use Paulnovikov\RestClient\Exception\UnexpectedApiResponseException;
 use Paulnovikov\RestClient\Http\HttpClientInterface;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractApi
 {
-    public function __construct(protected HttpClientInterface $httpClient) {}
+    public function __construct(protected readonly HttpClientInterface $httpClient) {}
 
     /**
      * @throws JsonException
@@ -23,6 +24,21 @@ abstract class AbstractApi
         array $headers = [],
         ?array $payload = null
     ): array {
+        $response = $this->sendRequest($method, $path, $headers, $payload);
+        $this->assertStatus($expectedStatus, $response, $method, $path);
+
+        return $this->decodeJson($response);
+    }
+
+    /**
+     * @throws JsonException
+     */
+    protected function sendRequest(
+        string $method,
+        string $path,
+        array $headers = [],
+        ?array $payload = null
+    ): ResponseInterface {
         $body = null;
 
         if ($payload !== null) {
@@ -30,14 +46,39 @@ abstract class AbstractApi
             $body = json_encode($payload, JSON_THROW_ON_ERROR);
         }
 
-        $response = $this->httpClient->request($method, $path, $headers, $body);
+        return $this->httpClient->request($method, $path, $headers, $body);
+    }
 
-        if ($response->getStatusCode() !== $expectedStatus) {
-            throw new HttpRequestException(
-                sprintf('Unexpected HTTP status %d', $response->getStatusCode())
+    protected function assertStatus(
+        int $expectedStatus,
+        ResponseInterface $response,
+        string $method,
+        string $path
+    ): void {
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode !== $expectedStatus) {
+            $body = $this->truncateBody((string) $response->getBody());
+            $message = sprintf(
+                'Unexpected HTTP status %d for %s %s',
+                $statusCode,
+                $method,
+                $path
             );
-        }
 
+            if ($body !== '') {
+                $message .= sprintf(': %s', $body);
+            }
+
+            throw new HttpRequestException($message);
+        }
+    }
+
+    /**
+     * @throws JsonException
+     */
+    protected function decodeJson(ResponseInterface $response): array
+    {
         $data = json_decode(
             (string) $response->getBody(),
             true,
@@ -50,5 +91,14 @@ abstract class AbstractApi
         }
 
         return $data;
+    }
+
+    private function truncateBody(string $body, int $limit = 2048): string
+    {
+        if (strlen($body) <= $limit) {
+            return $body;
+        }
+
+        return substr($body, 0, $limit) . '...';
     }
 }

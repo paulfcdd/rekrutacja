@@ -11,18 +11,14 @@ use Paulnovikov\RestClient\Mapper\ProducerMapper;
 use Paulnovikov\RestClient\Model\Producer\ProducerData;
 use Paulnovikov\RestClient\Model\Producer\ProducerCreate;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
 class ProducerApi extends AbstractApi
 {
-    private LoggerInterface $logger;
-
     public function __construct(
         HttpClientInterface $httpClient,
-        ?LoggerInterface $logger = null
+        private readonly LoggerInterface $logger
     ) {
         parent::__construct($httpClient);
-        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
