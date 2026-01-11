@@ -1,8 +1,10 @@
 <?php
 
-namespace Paulnovikov\RestClient\Producer\Model;
+namespace Paulnovikov\RestClient\Model\Producer;
 
-final readonly class Producer
+use Paulnovikov\RestClient\Model\ModelInterface;
+
+final readonly class Producer implements ModelInterface
 {
     public function __construct(
         private int $id,

@@ -10,3 +10,12 @@ services:
         image: noclued/rekrutacja_nginx:latest
         ports:
             - "8091:80"
+        networks:
+            default:
+                aliases:
+                    - rekrutacja-nginx
+
+networks:
+    default:
+        external: true
+        name: rekrutacja-net
