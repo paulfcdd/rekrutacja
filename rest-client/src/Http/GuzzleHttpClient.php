@@ -7,7 +7,7 @@ namespace Paulnovikov\RestClient\Http;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Paulnovikov\RestClient\Exception\HttpRequestException;
+use Paulnovikov\RestClient\Exception\ApiException;
 use Psr\Http\Message\ResponseInterface;
 
 final readonly class GuzzleHttpClient implements HttpClientInterface
@@ -49,19 +49,19 @@ final readonly class GuzzleHttpClient implements HttpClientInterface
                 $message .= sprintf(': %s', $bodyContents);
             }
 
-            throw new HttpRequestException(
+            throw new ApiException(
                 $message,
-                $statusCode ?? 0,
+                $resolvedUrl,
+                $statusCode,
+                $bodyContents,
                 $e
             );
         } catch (GuzzleException $e) {
-            throw new HttpRequestException(
-                sprintf(
-                    'HTTP request failed for %s %s',
-                    $method,
-                    $resolvedUrl
-                ),
-                0,
+            throw new ApiException(
+                sprintf('HTTP request failed for %s %s', $method, $resolvedUrl),
+                $resolvedUrl,
+                null,
+                null,
                 $e
             );
         }

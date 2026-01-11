@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Paulnovikov\RestClient\API;
 
 use JsonException;
-use Paulnovikov\RestClient\Exception\HttpRequestException;
+use Paulnovikov\RestClient\Exception\ApiException;
 use Paulnovikov\RestClient\Exception\UnexpectedApiResponseException;
 use Paulnovikov\RestClient\Http\HttpClientInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -70,7 +70,7 @@ abstract class AbstractApi
                 $message .= sprintf(': %s', $body);
             }
 
-            throw new HttpRequestException($message);
+            throw new ApiException($message, $path, $statusCode, $body);
         }
     }
 

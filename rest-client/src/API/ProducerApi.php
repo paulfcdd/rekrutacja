@@ -39,8 +39,9 @@ class ProducerApi extends AbstractApi
                 }
 
                 $producers[] = $mapper->transformFromApiResponse($item);
-            } catch (UnexpectedApiResponseException) {
+            } catch (UnexpectedApiResponseException $e) {
                 $this->logger->warning('Invalid producer record', [
+                    'error' => $e->getMessage(),
                     'item' => $item,
                 ]);
             }
