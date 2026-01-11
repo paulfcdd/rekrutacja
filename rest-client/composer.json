@@ -1,8 +1,9 @@
 {
     "name": "paulnovikov/rest-client",
+    "type": "library",
     "description": "Rest Client for API",
     "require": {
-        "php": ">=7.2",
+        "php": "^8.2",
         "psr/http-message": "^2.0",
         "guzzlehttp/guzzle": "^7.10"
     },
