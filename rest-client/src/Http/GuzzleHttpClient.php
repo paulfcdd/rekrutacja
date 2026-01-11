@@ -24,8 +24,10 @@ final readonly class GuzzleHttpClient implements HttpClientInterface
         array $headers = [],
         ?string $body = null
     ): ResponseInterface {
+        $resolvedUrl = $this->resolveUrl($url);
+
         try {
-            return $this->client->request($method, $this->resolveUrl($url), [
+            return $this->client->request($method, $resolvedUrl, [
                 'headers' => $this->buildHeaders($headers),
                 'body' => $body,
             ]);
@@ -33,14 +35,18 @@ final readonly class GuzzleHttpClient implements HttpClientInterface
             $response = $e->getResponse();
             $statusCode = $response?->getStatusCode();
             $bodyContents = $response ? (string) $response->getBody() : '';
-            $message = 'HTTP request failed';
+            $message = sprintf(
+                'HTTP request failed for %s %s',
+                $method,
+                $resolvedUrl
+            );
 
             if ($statusCode !== null) {
-                $message = sprintf(
-                    'HTTP request failed with status %d: %s',
-                    $statusCode,
-                    $bodyContents
-                );
+                $message .= sprintf(' with status %d', $statusCode);
+            }
+
+            if ($bodyContents !== '') {
+                $message .= sprintf(': %s', $bodyContents);
             }
 
             throw new HttpRequestException(
@@ -50,7 +56,11 @@ final readonly class GuzzleHttpClient implements HttpClientInterface
             );
         } catch (GuzzleException $e) {
             throw new HttpRequestException(
-                'HTTP request failed',
+                sprintf(
+                    'HTTP request failed for %s %s',
+                    $method,
+                    $resolvedUrl
+                ),
                 0,
                 $e
             );
