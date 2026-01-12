@@ -13,8 +13,8 @@ use Paulnovikov\RestClient\ApiClient;
 
 $client = ApiClient::create(
     'http://rekrutacja.localhost:8091/shop_api/v1',
-    'rest',
-    'vKTUeyrt1!'
+    'user',
+    'password'
 );
 
 $producers = $client->producers()->getAll();
